@@ -5,19 +5,18 @@ metadata:
   annotations:
     build.appstudio.openshift.io/repo: "{{repo_url}}?rev={{revision}}"
     build.appstudio.redhat.com/commit_sha: '{{revision}}'
-    build.appstudio.redhat.com/pull_request_number: '{{pull_request_number}}'
     build.appstudio.redhat.com/target_branch: '{{target_branch}}'
     pipelinesascode.tekton.dev/cancel-in-progress: "true"
     pipelinesascode.tekton.dev/max-keep-runs: "3"
-    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch
+    pipelinesascode.tekton.dev/on-cel-expression: event == "push" && target_branch
       == "main"
   creationTimestamp: null
   labels:
     appstudio.openshift.io/application: "jhutar-app"
     appstudio.openshift.io/component: "jhutar-comp"
     pipelines.appstudio.openshift.io/type: build
-  name: "jhutar-comp-on-pull-request"
-  namespace: "test-rhtap-1-tenant"
+  name: "jhutar-comp-on-push"
+  namespace: "test-rhtap-96-tenant"
 spec:
   timeouts:
     pipeline: "6h"
@@ -27,9 +26,7 @@ spec:
   - name: revision
     value: "{{ revision }}"
   - name: output-image
-    value: quay.io/redhat-user-workloads-stage/test-rhtap-1-tenant/jhutar-comp:on-pr-{{revision}}
-  - name: image-expires-after
-    value: 5d
+    value: quay.io/redhat-user-workloads-stage/test-rhtap-96-tenant/jhutar-comp:{{revision}}
   - name: build-platforms
     value:
     - linux/x86_64
